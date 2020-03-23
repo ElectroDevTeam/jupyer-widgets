@@ -21,7 +21,7 @@ class GenericProductsPrinter(widgets.Output):
 
     def append(self, prod):
         self.prods.append((prod, str(datetime.datetime.now())))
-        if self.index == len(self.prods) - 2:
+        if self.index == len(self.prods) - 1:
             self.index += 1
         self.update_display()
 
@@ -33,7 +33,7 @@ class GenericProductsPrinter(widgets.Output):
         self.pretty_print_out.clear_output(True)
         self.timestamp_out.clear_output(True)
         if self.prods:
-            prod, time = self.prods[self.index]
+            prod, time = self.prods[self.index - 1]
             with self.pretty_print_out:
                 prod.pretty_print()
             with self.timestamp_out:
@@ -42,11 +42,11 @@ class GenericProductsPrinter(widgets.Output):
     def update_slider(self):
         if not self.slider:
             with self.slider_out:
-                self.slider = widgets.IntSlider(min=0, max=len(self.prods) - 1, step=1, value=self.index)
+                self.slider = widgets.IntSlider(min=1, max=len(self.prods), step=1, value=self.index)
                 display(self.slider)
                 self.slider.observe(self.update_index, names='value')
         else:
-            self.slider.max = len(self.prods) - 1
+            self.slider.max = len(self.prods)
             self.slider.value = self.index
 
     def update_display(self):
